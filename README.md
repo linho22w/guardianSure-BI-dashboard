@@ -1,6 +1,6 @@
 # GuardianSure, a Business Intelligence Dashboard
 
-Interactive Power BI analytics system built for **GuardianSure**, a fictitious insurance company, as the final project for the Business Intelligence course of my MSc in Informatics Engineering at UTAD.
+Interactive Power BI analytics system built for **GuardianSure**, a fictitious insurance company, as the final project for the Business Intelligence course of my MSc in Computer Engineering at UTAD.
 
 This was a team assignment (5 students). I acted as project manager and lead technical contributor, coordinating the team's workflow and planning, and driving execution across every phase myself, from requirements gathering and data modeling to the DAX measures and the final dashboard design.
 
