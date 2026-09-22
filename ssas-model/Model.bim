@@ -1,0 +1,442 @@
+{
+  "name": "SemanticModel",
+  "compatibilityLevel": 1500,
+  "model": {
+    "culture": "pt-PT",
+    "dataSources": [
+      {
+        "type": "structured",
+        "name": "SQL/localhost\\MEIBI2025;GuardianSureDWH",
+        "connectionDetails": {
+          "protocol": "tds",
+          "address": {
+            "server": "localhost\\MEIBI2025",
+            "database": "GuardianSureDWH"
+          },
+          "authentication": null,
+          "query": null
+        },
+        "credential": {
+          "AuthenticationKind": "Windows",
+          "kind": "SQL",
+          "path": "localhost\\meibi2025;GuardianSureDWH",
+          "Username": "pauli",
+          "EncryptConnection": false
+        }
+      }
+    ],
+    "tables": [
+      {
+        "name": "fact_Claims",
+        "columns": [
+          {
+            "name": "ClaimID",
+            "dataType": "int64",
+            "sourceColumn": "ClaimID",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "PolicyID",
+            "dataType": "int64",
+            "sourceColumn": "PolicyID",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "ClaimDate",
+            "dataType": "dateTime",
+            "sourceColumn": "ClaimDate"
+          },
+          {
+            "name": "ClaimAmount",
+            "dataType": "int64",
+            "sourceColumn": "ClaimAmount"
+          },
+          {
+            "name": "ClaimStatus",
+            "dataType": "string",
+            "sourceColumn": "ClaimStatus"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/localhost\\MEIBI2025;GuardianSureDWH\",",
+                "    dbo_RawClaims = Source{[Schema=\"dbo\",Item=\"RawClaims\"]}[Data],",
+                "    #\"Tipo Alterado\" = Table.TransformColumnTypes(dbo_RawClaims,{{\"ClaimDate\", type date}})",
+                "in",
+                "    #\"Tipo Alterado\""
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "fact_Payments",
+        "columns": [
+          {
+            "name": "PaymentID",
+            "dataType": "int64",
+            "sourceColumn": "PaymentID",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "PolicyID",
+            "dataType": "int64",
+            "sourceColumn": "PolicyID",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "PaymentDate",
+            "dataType": "dateTime",
+            "sourceColumn": "PaymentDate"
+          },
+          {
+            "name": "PaymentAmount",
+            "dataType": "int64",
+            "sourceColumn": "PaymentAmount"
+          },
+          {
+            "name": "PaymentStatus",
+            "dataType": "string",
+            "sourceColumn": "PaymentStatus"
+          },
+          {
+            "name": "PaymentFrequency",
+            "dataType": "string",
+            "sourceColumn": "PaymentFrequency"
+          },
+          {
+            "name": "PaymentMethod",
+            "dataType": "string",
+            "sourceColumn": "PaymentMethod"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/localhost\\MEIBI2025;GuardianSureDWH\",",
+                "    dbo_RawPayments = Source{[Schema=\"dbo\",Item=\"RawPayments\"]}[Data]",
+                "in",
+                "    dbo_RawPayments"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "fact_PolicyDetails",
+        "columns": [
+          {
+            "name": "PolicyID",
+            "dataType": "int64",
+            "sourceColumn": "PolicyID",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Product",
+            "dataType": "string",
+            "sourceColumn": "Product"
+          },
+          {
+            "name": "PolicyHolderID",
+            "dataType": "int64",
+            "sourceColumn": "PolicyHolderID",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "SelectedTermType",
+            "dataType": "string",
+            "sourceColumn": "SelectedTermType"
+          },
+          {
+            "name": "PolicyStartDate",
+            "dataType": "dateTime",
+            "sourceColumn": "PolicyStartDate"
+          },
+          {
+            "name": "PolicyEndDate",
+            "dataType": "dateTime",
+            "sourceColumn": "PolicyEndDate"
+          },
+          {
+            "name": "PremiumAmount",
+            "dataType": "int64",
+            "sourceColumn": "PremiumAmount"
+          },
+          {
+            "name": "BillingMethod",
+            "dataType": "string",
+            "sourceColumn": "BillingMethod"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": "RawPolicyDetails"
+            }
+          }
+        ]
+      },
+      {
+        "name": "dim_PolicyHolderDetails",
+        "columns": [
+          {
+            "name": "PolicyHolderID",
+            "dataType": "int64",
+            "sourceColumn": "PolicyHolderID",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "PolicyHolderName",
+            "dataType": "string",
+            "sourceColumn": "PolicyHolderName"
+          },
+          {
+            "name": "Email",
+            "dataType": "string",
+            "sourceColumn": "Email"
+          },
+          {
+            "name": "DateOfBirth",
+            "dataType": "dateTime",
+            "sourceColumn": "DateOfBirth"
+          },
+          {
+            "name": "Gender",
+            "dataType": "string",
+            "sourceColumn": "Gender"
+          },
+          {
+            "name": "DrivingLicenseYears",
+            "dataType": "int64",
+            "sourceColumn": "DrivingLicenseYears",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Country",
+            "dataType": "string",
+            "sourceColumn": "Country"
+          },
+          {
+            "type": "calculated",
+            "name": "Age",
+            "dataType": "int64",
+            "isDataTypeInferred": true,
+            "expression": "  DATEDIFF(dim_PolicyHolderDetails[DateOfBirth], TODAY(), YEAR)",
+            "summarizeBy": "none"
+          },
+          {
+            "type": "calculated",
+            "name": "AgeGroup",
+            "dataType": "string",
+            "isDataTypeInferred": true,
+            "expression": [
+              " VAR Age = DATEDIFF('dim_PolicyHolderDetails'[DateOfBirth], TODAY(), YEAR)",
+              "RETURN ",
+              "    SWITCH(",
+              "        TRUE(),",
+              "        Age <= 30, \"20-30\",",
+              "        Age <= 40, \"31-40\",",
+              "        Age <= 50, \"41-50\",",
+              "        Age <= 60, \"51-60\",",
+              "        Age <= 70, \"61-70\",",
+              "        Age < 80, \"71-79\",",
+              "        \"80+\"",
+              "    )"
+            ]
+          },
+          {
+            "type": "calculated",
+            "name": "Todos os Paises",
+            "dataType": "string",
+            "isDataTypeInferred": true,
+            "expression": " \"Todos\""
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"SQL/localhost\\MEIBI2025;GuardianSureDWH\",",
+                "    dbo_RawPolicyHolderDetails = Source{[Schema=\"dbo\",Item=\"RawPolicyHolderDetails\"]}[Data]",
+                "in",
+                "    dbo_RawPolicyHolderDetails"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "dim_Calendário",
+        "dataCategory": "Time",
+        "columns": [
+          {
+            "name": "Date",
+            "dataType": "dateTime",
+            "isKey": true,
+            "sourceColumn": "Date"
+          },
+          {
+            "name": "Ano",
+            "dataType": "int64",
+            "sourceColumn": "Ano",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Mês",
+            "dataType": "int64",
+            "sourceColumn": "Mês",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Nome do Mês",
+            "dataType": "string",
+            "sourceColumn": "Nome do Mês",
+            "sortByColumn": "Mês"
+          },
+          {
+            "name": "Trimestre",
+            "dataType": "int64",
+            "sourceColumn": "Trimestre",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Semana do Ano",
+            "dataType": "int64",
+            "sourceColumn": "Semana do Ano",
+            "summarizeBy": "none"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Fonte = RawPolicyDetails,",
+                "    MinData = List.Min(Fonte[PolicyStartDate]),",
+                "    MaxData = List.Max(Fonte[PolicyEndDate]),",
+                "    ListaDatas = List.Dates(MinData, Number.From(MaxData - MinData) + 1, #duration(1,0,0,0)),",
+                "    TabelaDatas = Table.FromList(ListaDatas, Splitter.SplitByNothing(), {\"Date\"}),",
+                "    TabelaDatasFormatada = Table.TransformColumnTypes(TabelaDatas, { {\"Date\", type date}}),",
+                "    #\"Ano Inserido\" = Table.AddColumn(TabelaDatasFormatada, \"Ano\", each Date.Year([Date]), Int64.Type),",
+                "    #\"Mês Inserido\" = Table.AddColumn(#\"Ano Inserido\", \"Mês\", each Date.Month([Date]), Int64.Type),",
+                "    #\"Nome do Mês Inserido\" = Table.AddColumn(#\"Mês Inserido\", \"Nome do Mês\", each Date.MonthName([Date]), type text),",
+                "    #\"Trimestre Inserido\" = Table.AddColumn(#\"Nome do Mês Inserido\", \"Trimestre\", each Date.QuarterOfYear([Date]), Int64.Type),",
+                "    #\"Semana do Ano Inserida\" = Table.AddColumn(#\"Trimestre Inserido\", \"Semana do Ano\", each Date.WeekOfYear([Date]), Int64.Type)",
+                "",
+                "in",
+                "    #\"Semana do Ano Inserida\""
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Medidas",
+        "partitions": [
+          {
+            "name": "CalculatedTable 1",
+            "source": {
+              "type": "calculated",
+              "expression": "   DATATABLE(\"Measure\", STRING, {})"
+            }
+          }
+        ]
+      }
+    ],
+    "relationships": [
+      {
+        "name": "c12a999a-cd03-4a74-aceb-ec7e4f214970",
+        "fromTable": "fact_Claims",
+        "fromColumn": "ClaimDate",
+        "toTable": "dim_Calendário",
+        "toColumn": "Date"
+      },
+      {
+        "name": "042359a7-c6c0-4c3c-bcb2-91f4422373af",
+        "fromTable": "fact_PolicyDetails",
+        "fromColumn": "PolicyStartDate",
+        "toTable": "dim_Calendário",
+        "toColumn": "Date"
+      },
+      {
+        "name": "9e993431-83f8-4b39-b675-fadede310214",
+        "fromTable": "fact_PolicyDetails",
+        "fromColumn": "PolicyEndDate",
+        "toTable": "dim_Calendário",
+        "toColumn": "Date",
+        "isActive": false
+      },
+      {
+        "name": "38716dec-b744-41ba-a6ed-59fc99d09def",
+        "fromTable": "fact_PolicyDetails",
+        "fromColumn": "PolicyHolderID",
+        "toTable": "dim_PolicyHolderDetails",
+        "toColumn": "PolicyHolderID"
+      },
+      {
+        "name": "fa05832a-ab2e-405b-92bf-20fcb3692862",
+        "fromTable": "fact_Claims",
+        "fromColumn": "PolicyID",
+        "toTable": "fact_PolicyDetails",
+        "toColumn": "PolicyID",
+        "isActive": false
+      },
+      {
+        "name": "44dc6b16-f08d-483f-a2b5-bb66476382c6",
+        "fromTable": "fact_Payments",
+        "fromColumn": "PaymentDate",
+        "toTable": "dim_Calendário",
+        "toColumn": "Date",
+        "isActive": false
+      },
+      {
+        "name": "0b445a6d-ce56-4088-9b64-5048a09f92b9",
+        "fromTable": "fact_Payments",
+        "fromColumn": "PolicyID",
+        "toTable": "fact_PolicyDetails",
+        "toColumn": "PolicyID"
+      }
+    ],
+    "expressions": [
+      {
+        "name": "RawPolicyDetails",
+        "kind": "m",
+        "expression": [
+          "let",
+          "    Source = #\"SQL/localhost\\MEIBI2025;GuardianSureDWH\",",
+          "    dbo_RawPolicyDetails = Source{[Schema=\"dbo\",Item=\"RawPolicyDetails\"]}[Data]",
+          "in",
+          "    dbo_RawPolicyDetails"
+        ]
+      }
+    ],
+    "annotations": [
+      {
+        "name": "ClientCompatibilityLevel",
+        "value": "600"
+      }
+    ]
+  },
+  "id": "SemanticModel"
+}
